@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>StudyHub - Personal Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            .mobile-padding {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .mobile-text-sm {
+                font-size: 0.875rem !important;
+            }
+            
+            .mobile-grid-1 {
+                grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+            }
+            
+            .mobile-grid-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            
+            .mobile-space-y-4 > * + * {
+                margin-top: 1rem !important;
+            }
+            
+            .mobile-p-4 {
+                padding: 1rem !important;
+            }
+            
+            .mobile-p-6 {
+                padding: 1.5rem !important;
+            }
+            
+            .mobile-text-base {
+                font-size: 1rem !important;
+            }
+            
+            .mobile-text-lg {
+                font-size: 1.125rem !important;
+            }
+            
+            .mobile-text-xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .mobile-text-2xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .mobile-text-3xl {
+                font-size: 1.875rem !important;
+            }
+            
+            .mobile-mb-6 {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .mobile-mb-8 {
+                margin-bottom: 2rem !important;
+            }
+            
+            .mobile-py-6 {
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+            
+            .mobile-gap-4 {
+                gap: 1rem !important;
+            }
+            
+            .mobile-gap-6 {
+                gap: 1.5rem !important;
+            }
+            
+            .mobile-h-auto {
+                height: auto !important;
+            }
+            
+            .mobile-max-h-32 {
+                max-height: 8rem !important;
+            }
+            
+            .mobile-flex-col {
+                flex-direction: column !important;
+            }
+            
+            .mobile-w-full {
+                width: 100% !important;
+            }
+            
+            .mobile-hidden {
+                display: none !important;
+            }
+            
+            .mobile-block {
+                display: block !important;
+            }
+        }
+        
+        /* Touch-friendly buttons for mobile */
+        @media (max-width: 768px) {
+            .btn-animate {
+                min-height: 44px !important;
+                padding: 0.75rem 1rem !important;
+                font-size: 0.875rem !important;
+            }
+            
+            .card-hover {
+                padding: 1rem !important;
+            }
+            
+            input, textarea, select {
+                min-height: 44px !important;
+                font-size: 16px !important; /* Prevents zoom on iOS */
+            }
+        }
+        
+        /* Improved mobile modal sizing */
+        @media (max-width: 768px) {
+            .mobile-modal {
+                margin: 0.5rem !important;
+                max-height: calc(100vh - 1rem) !important;
+                width: calc(100vw - 1rem) !important;
+            }
+            
+            .mobile-modal-content {
+                max-height: calc(100vh - 8rem) !important;
+                overflow-y: auto !important;
+            }
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .btn-animate {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-animate:hover::before {
+            left: 100%;
+        }
+        
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+    <!-- Header -->
+    <header class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto mobile-padding px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mobile-py-6 py-4">
+                <div class="flex items-center space-x-2 md:space-x-3">
+                    <div class="w-8 h-8 md:w-10 md:h-10 bg-white rounded-xl flex items-center justify-center">
+                        <span class="text-lg md:text-2xl">📚</span>
+                    </div>
+                    <h1 class="mobile-text-xl text-2xl font-bold text-white">StudyHub</h1>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white p-2" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#dashboard" class="text-white hover:text-blue-200 transition-colors">Dashboard</a>
+                    <a href="#calendar" class="text-white hover:text-blue-200 transition-colors">Calendar</a>
+                    <a href="#progress" class="text-white hover:text-blue-200 transition-colors">Progress</a>
+                </nav>
+                
+                <!-- Desktop Add Button -->
+                <button class="hidden md:block btn-animate bg-white text-purple-600 px-4 py-2 rounded-lg font-medium" onclick="showAddNewModal()">
+                    Add New
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <div class="space-y-3">
+                    <a href="#dashboard" class="block text-white hover:text-blue-200 transition-colors py-2">Dashboard</a>
+                    <a href="#calendar" class="block text-white hover:text-blue-200 transition-colors py-2">Calendar</a>
+                    <a href="#progress" class="block text-white hover:text-blue-200 transition-colors py-2">Progress</a>
+                    <button class="w-full btn-animate bg-white text-purple-600 py-3 rounded-lg font-medium mt-4" onclick="showAddNewModal()">
+                        Add New
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto mobile-padding px-4 sm:px-6 lg:px-8 mobile-py-6 py-8">
+        <!-- Welcome Section -->
+        <div class="text-center mobile-mb-8 mb-12 fade-in">
+            <h2 class="mobile-text-2xl text-4xl font-bold text-white mobile-mb-6 mb-4">Welcome back, Abdo! 👋</h2>
+            <p class="text-blue-100 mobile-text-base text-lg">Organize your academic life with ease</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="mobile-grid-2 grid grid-cols-1 md:grid-cols-4 mobile-gap-4 gap-6 mobile-mb-8 mb-12">
+            <div class="card-hover bg-white rounded-2xl mobile-p-4 p-6 text-center">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <span class="text-xl md:text-2xl">🎓</span>
+                </div>
+                <h3 class="mobile-text-xl text-2xl font-bold text-gray-800 mb-2">0</h3>
+                <p class="text-gray-600 mobile-text-sm">Active Courses</p>
+            </div>
+            <div class="card-hover bg-white rounded-2xl mobile-p-4 p-6 text-center">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <span class="text-xl md:text-2xl">📝</span>
+                </div>
+                <h3 class="mobile-text-xl text-2xl font-bold text-gray-800 mb-2">0</h3>
+                <p class="text-gray-600 mobile-text-sm">Pending Tasks</p>
+            </div>
+            <div class="card-hover bg-white rounded-2xl mobile-p-4 p-6 text-center">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <span class="text-xl md:text-2xl">⏰</span>
+                </div>
+                <h3 class="mobile-text-xl text-2xl font-bold text-gray-800 mb-2">0</h3>
+                <p class="text-gray-600 mobile-text-sm">Due This Week</p>
+            </div>
+            <div class="card-hover bg-white rounded-2xl mobile-p-4 p-6 text-center">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <span class="text-xl md:text-2xl">📊</span>
+                </div>
+                <h3 class="mobile-text-xl text-2xl font-bold text-gray-800 mb-2">0%</h3>
+                <p class="text-gray-600 mobile-text-sm">Avg. Progress</p>
+            </div>
+        </div>
+
+        <!-- Main Categories -->
+        <div class="mobile-grid-1 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mobile-gap-6 gap-8 mobile-mb-8 mb-12">
+            <!-- Lectures -->
+            <div class="card-hover bg-white rounded-2xl mobile-p-6 p-8">
+                <div class="flex items-center justify-between mobile-mb-6 mb-6">
+                    <div class="flex items-center space-x-2 md:space-x-3">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <span class="text-xl md:text-2xl">🎤</span>
+                        </div>
+                        <h3 class="mobile-text-lg text-xl font-bold text-gray-800">Lectures</h3>
+                    </div>
+                    <div class="pulse-dot w-3 h-3 bg-blue-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 mobile-text-sm mobile-mb-6 mb-6">Organize and review your lecture materials</p>
+                <div class="space-y-3 mobile-mb-6 mb-6">
+                    <div class="text-center mobile-py-6 py-8 text-gray-400">
+                        <p class="mobile-text-sm text-sm">No lectures added yet</p>
+                        <p class="text-xs mt-1">Upload your first lecture materials below</p>
+                    </div>
+                </div>
+                <div class="mobile-mb-6 mb-4">
+                    <div class="border-2 border-dashed border-blue-300 rounded-lg mobile-p-4 p-4 text-center hover:border-blue-400 transition-colors cursor-pointer" onclick="document.getElementById('lecture-files').click()">
+                        <input type="file" id="lecture-files" multiple accept=".pdf,.ppt,.pptx,.doc,.docx,.txt" class="hidden">
+                        <div class="text-blue-600 mb-2">📁</div>
+                        <p class="mobile-text-sm text-sm text-blue-600 font-medium">Drop lecture files here or click to browse</p>
+                        <p class="text-xs text-gray-500 mt-1">PDF, PPT, DOC, TXT files supported</p>
+                    </div>
+                </div>
+                <button class="btn-animate w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium" onclick="showSection('lectures')">
+                    View All Lectures
+                </button>
+            </div>
+
+            <!-- Tutorials -->
+            <div class="card-hover bg-white rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">👨‍🏫</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Tutorials</h3>
+                    </div>
+                    <div class="pulse-dot w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 mb-6">Interactive learning sessions and Q&A</p>
+                <div class="space-y-3 mb-6">
+                    <div class="text-center py-8 text-gray-400">
+                        <p class="text-sm">No tutorials added yet</p>
+                        <p class="text-xs mt-1">Start by uploading tutorial materials</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="border-2 border-dashed border-green-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors cursor-pointer" onclick="document.getElementById('tutorial-files').click()">
+                        <input type="file" id="tutorial-files" multiple accept=".pdf,.py,.js,.html,.css,.txt,.md" class="hidden">
+                        <div class="text-green-600 mb-2">📁</div>
+                        <p class="text-sm text-green-600 font-medium">Add tutorial materials</p>
+                        <p class="text-xs text-gray-500 mt-1">Code files, PDFs, and documents</p>
+                    </div>
+                </div>
+                <button class="btn-animate w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium" onclick="showSection('tutorials')">
+                    Browse Tutorials
+                </button>
+            </div>
+
+            <!-- Labs -->
+            <div class="card-hover bg-white rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">🔬</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Labs</h3>
+                    </div>
+                    <div class="pulse-dot w-3 h-3 bg-purple-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 mb-6">Hands-on practical experiments</p>
+                <div class="space-y-3 mb-6">
+                    <div class="text-center py-8 text-gray-400">
+                        <p class="text-sm">No labs added yet</p>
+                        <p class="text-xs mt-1">Upload your lab experiments and reports</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors cursor-pointer" onclick="document.getElementById('lab-files').click()">
+                        <input type="file" id="lab-files" multiple accept=".py,.java,.cpp,.c,.js,.html,.css,.pdf,.txt,.zip" class="hidden">
+                        <div class="text-purple-600 mb-2">🔬</div>
+                        <p class="text-sm text-purple-600 font-medium">Upload lab experiments</p>
+                        <p class="text-xs text-gray-500 mt-1">Code, reports, and data files</p>
+                    </div>
+                </div>
+                <button class="btn-animate w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium" onclick="showSection('labs')">
+                    Access Labs
+                </button>
+            </div>
+
+            <!-- Assignments -->
+            <div class="card-hover bg-white rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">📋</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Assignments</h3>
+                    </div>
+                    <div class="pulse-dot w-3 h-3 bg-orange-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 mb-6">Track your homework and projects</p>
+                <div class="space-y-3 mb-6">
+                    <div class="text-center py-8 text-gray-400">
+                        <p class="text-sm">No assignments added yet</p>
+                        <p class="text-xs mt-1">Upload your homework and projects</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="border-2 border-dashed border-orange-300 rounded-lg p-4 text-center hover:border-orange-400 transition-colors cursor-pointer" onclick="document.getElementById('assignment-files').click()">
+                        <input type="file" id="assignment-files" multiple accept=".pdf,.doc,.docx,.txt,.zip,.py,.java,.cpp" class="hidden">
+                        <div class="text-orange-600 mb-2">📋</div>
+                        <p class="text-sm text-orange-600 font-medium">Submit assignment files</p>
+                        <p class="text-xs text-gray-500 mt-1">Documents, code, and project files</p>
+                    </div>
+                </div>
+                <button class="btn-animate w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg font-medium" onclick="showSection('assignments')">
+                    View Assignments
+                </button>
+            </div>
+
+            <!-- Notes -->
+            <div class="card-hover bg-white rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">📝</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Notes</h3>
+                    </div>
+                    <div class="pulse-dot w-3 h-3 bg-pink-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 mb-6">Your personal study notes and summaries</p>
+                <div class="space-y-3 mb-6">
+                    <div class="text-center py-8 text-gray-400">
+                        <p class="text-sm">No notes added yet</p>
+                        <p class="text-xs mt-1">Create your first study notes</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="border-2 border-dashed border-pink-300 rounded-lg p-4 text-center hover:border-pink-400 transition-colors cursor-pointer" onclick="document.getElementById('notes-files').click()">
+                        <input type="file" id="notes-files" multiple accept=".pdf,.doc,.docx,.txt,.md,.odt" class="hidden">
+                        <div class="text-pink-600 mb-2">📝</div>
+                        <p class="text-sm text-pink-600 font-medium">Add study notes</p>
+                        <p class="text-xs text-gray-500 mt-1">Text files, PDFs, and documents</p>
+                    </div>
+                </div>
+                <button class="btn-animate w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-medium" onclick="showSection('notes')">
+                    Open Notes
+                </button>
+            </div>
+
+            <!-- AI Practice Generator -->
+            <div class="card-hover bg-white rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">🤖</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">AI Practice Generator</h3>
+                    </div>
+                    <div class="pulse-dot w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 mb-6">Turn your notes into practice problems with AI</p>
+                <div class="space-y-4 mb-6">
+                    <div class="border-2 border-dashed border-purple-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors cursor-pointer" onclick="document.getElementById('ai-content-input').click()">
+                        <input type="file" id="ai-content-input" multiple accept=".pdf,.txt,.doc,.docx,.md" class="hidden">
+                        <div class="text-purple-600 mb-2">🧠</div>
+                        <p class="text-sm text-purple-600 font-medium">Upload notes or slides</p>
+                        <p class="text-xs text-gray-500 mt-1">PDF, TXT, DOC files supported</p>
+                    </div>
+                    <div class="text-center text-gray-400 text-sm">OR</div>
+                    <textarea id="manual-content" placeholder="Paste your notes or lecture content here..." class="w-full p-3 border border-gray-300 rounded-lg resize-none h-24 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn-animate flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 rounded-lg font-medium" onclick="generatePracticeProblems()">
+                        ✨ Generate Problems
+                    </button>
+                    <button class="btn-animate flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 rounded-lg font-medium" onclick="generateSummary()">
+                        📝 Summarize
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lecture Recorder -->
+            <div class="card-hover bg-white rounded-2xl mobile-p-6 p-8">
+                <div class="flex items-center justify-between mobile-mb-6 mb-6">
+                    <div class="flex items-center space-x-2 md:space-x-3">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                            <span class="text-xl md:text-2xl">🎙️</span>
+                        </div>
+                        <h3 class="mobile-text-lg text-xl font-bold text-gray-800">Lecture Recorder</h3>
+                    </div>
+                    <div id="recording-indicator" class="pulse-dot w-3 h-3 bg-red-500 rounded-full hidden"></div>
+                </div>
+                <p class="text-gray-600 mobile-text-sm mobile-mb-6 mb-6">Record lectures with AI-powered note generation</p>
+                
+                <!-- Language Selection -->
+                <div class="mobile-mb-6 mb-4">
+                    <label class="block mobile-text-sm text-sm font-medium text-gray-700 mb-2">Recording Language</label>
+                    <select id="recording-language" class="w-full mobile-p-4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="en-US">🇺🇸 English (US)</option>
+                        <option value="en-GB">🇬🇧 English (UK)</option>
+                        <option value="es-ES">🇪🇸 Spanish (Spain)</option>
+                        <option value="es-MX">🇲🇽 Spanish (Mexico)</option>
+                        <option value="fr-FR">🇫🇷 French</option>
+                        <option value="de-DE">🇩🇪 German</option>
+                        <option value="it-IT">🇮🇹 Italian</option>
+                        <option value="pt-BR">🇧🇷 Portuguese (Brazil)</option>
+                        <option value="pt-PT">🇵🇹 Portuguese (Portugal)</option>
+                        <option value="ru-RU">🇷🇺 Russian</option>
+                        <option value="zh-CN">🇨🇳 Chinese (Simplified)</option>
+                        <option value="zh-TW">🇹🇼 Chinese (Traditional)</option>
+                        <option value="ja-JP">🇯🇵 Japanese</option>
+                        <option value="ko-KR">🇰🇷 Korean</option>
+                        <option value="ar-SA">🇸🇦 Arabic</option>
+                        <option value="hi-IN">🇮🇳 Hindi</option>
+                        <option value="nl-NL">🇳🇱 Dutch</option>
+                        <option value="sv-SE">🇸🇪 Swedish</option>
+                        <option value="da-DK">🇩🇰 Danish</option>
+                        <option value="no-NO">🇳🇴 Norwegian</option>
+                        <option value="fi-FI">🇫🇮 Finnish</option>
+                        <option value="pl-PL">🇵🇱 Polish</option>
+                        <option value="tr-TR">🇹🇷 Turkish</option>
+                        <option value="he-IL">🇮🇱 Hebrew</option>
+                        <option value="th-TH">🇹🇭 Thai</option>
+                        <option value="vi-VN">🇻🇳 Vietnamese</option>
+                    </select>
+                </div>
+
+                <!-- Recording Controls -->
+                <div class="mobile-space-y-4 space-y-4 mobile-mb-6 mb-6">
+                    <div class="flex items-center justify-between mobile-p-4 p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-2 md:space-x-3">
+                            <div id="recording-status" class="w-3 h-3 bg-gray-400 rounded-full"></div>
+                            <span id="recording-text" class="mobile-text-sm text-sm text-gray-600">Ready to record</span>
+                        </div>
+                        <div id="recording-timer" class="mobile-text-sm text-sm font-mono text-gray-600">00:00</div>
+                    </div>
+                    
+                    <div class="mobile-flex-col flex mobile-gap-4 gap-2">
+                        <button id="start-recording" class="btn-animate mobile-w-full flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-medium" onclick="startRecording()">
+                            🎙️ Start Recording
+                        </button>
+                        <button id="stop-recording" class="btn-animate mobile-w-full flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-medium hidden" onclick="stopRecording()">
+                            ⏹️ Stop Recording
+                        </button>
+                    </div>
+                    
+                    <div class="mobile-flex-col flex mobile-gap-4 gap-2">
+                        <button id="pause-recording" class="btn-animate mobile-w-full flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg font-medium hidden" onclick="pauseRecording()">
+                            ⏸️ Pause
+                        </button>
+                        <button id="resume-recording" class="btn-animate mobile-w-full flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium hidden" onclick="resumeRecording()">
+                            ▶️ Resume
+                        </button>
+                        <button id="clear-recording" class="btn-animate mobile-w-full flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-medium hidden" onclick="clearRecording()">
+                            🗑️ Clear
+                        </button>
+                    </div>
+                    
+                    <button id="generate-notes" class="btn-animate w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium hidden" onclick="generateNotesFromRecording()">
+                        ✨ Generate AI Notes
+                    </button>
+                </div>
+
+                <!-- Live Transcription Preview -->
+                <div id="live-transcription" class="hidden">
+                    <h4 class="mobile-text-sm text-sm font-medium text-gray-700 mb-2">Live Transcription:</h4>
+                    <div class="bg-gray-50 rounded-lg mobile-p-4 p-3 mobile-max-h-32 max-h-32 overflow-y-auto">
+                        <p id="transcription-text" class="mobile-text-sm text-sm text-gray-600 italic">Listening...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Resources -->
+            <div class="card-hover bg-white rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">🌐</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Study Resources</h3>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-6">Quick access to helpful study tools</p>
+                <div class="space-y-3">
+                    <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn-animate w-full bg-red-100 hover:bg-red-200 text-red-700 py-3 rounded-lg font-medium text-left px-4 block no-underline">
+                        📺 Open YouTube
+                    </a>
+                    <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" class="btn-animate w-full bg-green-100 hover:bg-green-200 text-green-700 py-3 rounded-lg font-medium text-left px-4 block no-underline">
+                        🤖 Open ChatGPT
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-2xl mobile-p-6 p-8 card-hover">
+            <h3 class="mobile-text-xl text-2xl font-bold text-gray-800 mobile-mb-6 mb-6">Recent Activity</h3>
+            <div class="space-y-4">
+                <div class="text-center mobile-py-6 py-12 text-gray-400">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mobile-mb-6 mb-4">
+                        <span class="text-xl md:text-2xl">📊</span>
+                    </div>
+                    <p class="mobile-text-base text-lg font-medium mb-2">No activity yet</p>
+                    <p class="mobile-text-sm text-sm">Your recent study activities will appear here</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Add New -->
+    <div id="addNewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl mobile-modal mobile-p-6 p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mobile-mb-6 mb-6">
+                <h3 class="mobile-text-xl text-2xl font-bold text-gray-800">Add New Item</h3>
+                <button onclick="closeAddNewModal()" class="text-gray-500 hover:text-gray-700 p-2">
+                    <span class="text-2xl">×</span>
+                </button>
+            </div>
+            <div class="mobile-modal-content space-y-3">
+                <button class="w-full bg-blue-100 hover:bg-blue-200 text-blue-700 py-3 rounded-lg font-medium text-left px-4" onclick="addNewItem('lecture')">
+                    🎤 Add Lecture
+                </button>
+                <button class="w-full bg-green-100 hover:bg-green-200 text-green-700 py-3 rounded-lg font-medium text-left px-4" onclick="addNewItem('tutorial')">
+                    👨‍🏫 Add Tutorial
+                </button>
+                <button class="w-full bg-purple-100 hover:bg-purple-200 text-purple-700 py-3 rounded-lg font-medium text-left px-4" onclick="addNewItem('lab')">
+                    🔬 Add Lab
+                </button>
+                <button class="w-full bg-orange-100 hover:bg-orange-200 text-orange-700 py-3 rounded-lg font-medium text-left px-4" onclick="addNewItem('assignment')">
+                    📋 Add Assignment
+                </button>
+                <button class="w-full bg-pink-100 hover:bg-pink-200 text-pink-700 py-3 rounded-lg font-medium text-left px-4" onclick="addNewItem('note')">
+                    📝 Add Note
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section View Modal -->
+    <div id="sectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl mobile-modal mobile-p-6 p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mobile-mb-6 mb-6">
+                <h3 id="sectionTitle" class="mobile-text-xl text-2xl font-bold text-gray-800"></h3>
+                <button onclick="closeSectionModal()" class="text-gray-500 hover:text-gray-700 p-2">
+                    <span class="text-2xl">×</span>
+                </button>
+            </div>
+            <div id="sectionContent" class="mobile-modal-content space-y-4">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Practice Problems Modal -->
+    <div id="practiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">🧠 AI Generated Practice Problems</h3>
+                <button onclick="closePracticeModal()" class="text-gray-500 hover:text-gray-700">
+                    <span class="text-2xl">×</span>
+                </button>
+            </div>
+            <div id="practiceContent" class="space-y-6">
+                <!-- Practice problems will be populated here -->
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button onclick="generateMoreProblems()" class="btn-animate bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium">
+                    ✨ Generate More
+                </button>
+                <button onclick="savePracticeProblems()" class="btn-animate bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                    💾 Save Problems
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Modal -->
+    <div id="summaryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">📝 AI Generated Summary</h3>
+                <button onclick="closeSummaryModal()" class="text-gray-500 hover:text-gray-700">
+                    <span class="text-2xl">×</span>
+                </button>
+            </div>
+            <div id="summaryContent" class="space-y-6">
+                <!-- Summary will be populated here -->
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button onclick="generateNewSummary()" class="btn-animate bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                    🔄 Regenerate
+                </button>
+                <button onclick="saveSummary()" class="btn-animate bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                    💾 Save Summary
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Notes Modal -->
+    <div id="generatedNotesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">🤖 AI Generated Lecture Notes</h3>
+                <button onclick="closeGeneratedNotesModal()" class="text-gray-500 hover:text-gray-700">
+                    <span class="text-2xl">×</span>
+                </button>
+            </div>
+            <div id="generatedNotesContent" class="space-y-6">
+                <!-- Generated notes will be populated here -->
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button onclick="editGeneratedNotes()" class="btn-animate bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                    ✏️ Edit Notes
+                </button>
+                <button onclick="saveGeneratedNotes()" class="btn-animate bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                    💾 Save Notes
+                </button>
+                <button onclick="exportNotes()" class="btn-animate bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium">
+                    📤 Export
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Content Popup -->
+    <div id="noContentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">⚠️</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3" id="noContentTitle">No Content Found</h3>
+                <p class="text-gray-600 mb-6" id="noContentMessage">Please upload a file or paste some content to continue.</p>
+                <div class="space-y-3">
+                    <button onclick="focusContentInput()" class="btn-animate w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
+                        📝 Add Content Now
+                    </button>
+                    <button onclick="closeNoContentModal()" class="btn-animate w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-medium">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage for study materials
+        let studyData = {
+            lectures: [],
+            tutorials: [],
+            labs: [],
+            assignments: [],
+            notes: []
+        };
+
+        // Mobile menu toggle function
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                menuBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                `;
+            }
+        }
+
+        // Recording variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordingStartTime;
+        let recordingTimer;
+        let recognition;
+        let isRecording = false;
+        let isPaused = false;
+        let pausedTime = 0;
+        let transcriptionText = '';
+        let recordedAudioBlob;
+        let currentLanguage = 'en-US';
+
+        // Modal functions
+        function showAddNewModal() {
+            document.getElementById('addNewModal').classList.remove('hidden');
+        }
+
+        function closeAddNewModal() {
+            document.getElementById('addNewModal').classList.add('hidden');
+        }
+
+        function showSection(sectionType) {
+            const modal = document.getElementById('sectionModal');
+            const title = document.getElementById('sectionTitle');
+            const content = document.getElementById('sectionContent');
+            
+            const sectionTitles = {
+                lectures: '🎤 All Lectures',
+                tutorials: '👨‍🏫 All Tutorials',
+                labs: '🔬 All Labs',
+                assignments: '📋 All Assignments',
+                notes: '📝 All Notes'
+            };
+            
+            title.textContent = sectionTitles[sectionType];
+            
+            const items = studyData[sectionType];
+            if (items.length === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">${sectionTitles[sectionType].split(' ')[0]}</span>
+                        </div>
+                        <p class="text-lg font-medium mb-2">No ${sectionType} added yet</p>
+                        <p class="text-sm">Click "Add New" to get started</p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = items.map(item => `
+                    <div class="bg-gray-50 rounded-lg p-4 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-gray-800">${item.title}</h4>
+                            <p class="text-sm text-gray-500">${item.description || 'No description'}</p>
+                            <p class="text-xs text-gray-400">Added: ${item.date}</p>
+                        </div>
+                        <button onclick="deleteItem('${sectionType}', ${item.id})" class="text-red-500 hover:text-red-700">
+                            🗑️
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeSectionModal() {
+            document.getElementById('sectionModal').classList.add('hidden');
+        }
+
+        function addNewItem(type) {
+            const title = prompt(`Enter ${type} title:`);
+            if (title) {
+                const description = prompt(`Enter ${type} description (optional):`);
+                const newItem = {
+                    id: Date.now(),
+                    title: title,
+                    description: description || '',
+                    date: new Date().toLocaleDateString()
+                };
+                
+                studyData[type + 's'].push(newItem);
+                updateStats();
+                closeAddNewModal();
+                
+                // Show success message
+                alert(`${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!`);
+            }
+        }
+
+        function deleteItem(sectionType, itemId) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                studyData[sectionType] = studyData[sectionType].filter(item => item.id !== itemId);
+                updateStats();
+                showSection(sectionType); // Refresh the modal
+            }
+        }
+
+        function updateStats() {
+            const totalItems = Object.values(studyData).reduce((sum, arr) => sum + arr.length, 0);
+            document.querySelector('.text-2xl.font-bold.text-gray-800.mb-2').textContent = totalItems;
+        }
+
+        // AI Practice Generator Functions
+        let currentContent = '';
+        let generatedProblems = [];
+        let generatedSummary = '';
+
+        function generatePracticeProblems() {
+            const fileInput = document.getElementById('ai-content-input');
+            const manualContent = document.getElementById('manual-content').value.trim();
+            
+            if (fileInput.files.length > 0) {
+                // Handle file upload
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentContent = e.target.result;
+                    createPracticeProblems(currentContent);
+                };
+                reader.readAsText(file);
+            } else if (manualContent) {
+                // Handle manual text input
+                currentContent = manualContent;
+                createPracticeProblems(currentContent);
+            } else {
+                showNoContentPopup('practice');
+                return;
+            }
+        }
+
+        function createPracticeProblems(content) {
+            // Show loading state
+            document.getElementById('practiceModal').classList.remove('hidden');
+            document.getElementById('practiceContent').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="animate-spin w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p class="text-gray-600">AI is analyzing your content and generating practice problems...</p>
+                </div>
+            `;
+
+            // Simulate AI processing (in a real app, this would call an AI API)
+            setTimeout(() => {
+                generatedProblems = generateProblemsFromContent(content);
+                displayPracticeProblems();
+            }, 2000);
+        }
+
+        function generateProblemsFromContent(content) {
+            // This simulates AI-generated problems based on content analysis
+            // In a real implementation, this would use an AI API like OpenAI GPT
+            
+            const problems = [];
+            const topics = extractTopics(content);
+            
+            topics.forEach((topic, index) => {
+                // Generate different types of problems
+                const problemTypes = ['multiple-choice', 'short-answer', 'true-false', 'fill-blank'];
+                const type = problemTypes[index % problemTypes.length];
+                
+                switch(type) {
+                    case 'multiple-choice':
+                        problems.push({
+                            id: Date.now() + index,
+                            type: 'Multiple Choice',
+                            question: `Which of the following best describes ${topic}?`,
+                            options: [
+                                `${topic} is a fundamental concept in this subject`,
+                                `${topic} is not relevant to this topic`,
+                                `${topic} only applies in specific cases`,
+                                `${topic} is an outdated concept`
+                            ],
+                            correct: 0,
+                            explanation: `${topic} is indeed a key concept that should be understood thoroughly.`
+                        });
+                        break;
+                    case 'short-answer':
+                        problems.push({
+                            id: Date.now() + index,
+                            type: 'Short Answer',
+                            question: `Explain the significance of ${topic} in your own words.`,
+                            sampleAnswer: `${topic} is important because it helps us understand the fundamental principles discussed in the material.`
+                        });
+                        break;
+                    case 'true-false':
+                        problems.push({
+                            id: Date.now() + index,
+                            type: 'True/False',
+                            question: `${topic} is a central theme in this material.`,
+                            correct: true,
+                            explanation: `This statement is true based on the content analysis.`
+                        });
+                        break;
+                    case 'fill-blank':
+                        problems.push({
+                            id: Date.now() + index,
+                            type: 'Fill in the Blank',
+                            question: `The concept of _______ is essential for understanding this topic.`,
+                            answer: topic,
+                            explanation: `${topic} fits perfectly in this context.`
+                        });
+                        break;
+                }
+            });
+            
+            return problems;
+        }
+
+        function extractTopics(content) {
+            // Simple topic extraction (in real app, would use NLP)
+            const words = content.toLowerCase().split(/\s+/);
+            const commonWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'can', 'this', 'that', 'these', 'those'];
+            
+            const topics = words
+                .filter(word => word.length > 4 && !commonWords.includes(word))
+                .filter((word, index, arr) => arr.indexOf(word) === index)
+                .slice(0, 5); // Take first 5 unique topics
+            
+            return topics.length > 0 ? topics : ['key concepts', 'main ideas', 'important principles'];
+        }
+
+        function displayPracticeProblems() {
+            const content = document.getElementById('practiceContent');
+            
+            if (generatedProblems.length === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-8 text-gray-400">
+                        <p>No problems could be generated from this content. Try providing more detailed material.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            content.innerHTML = generatedProblems.map((problem, index) => {
+                switch(problem.type) {
+                    case 'Multiple Choice':
+                        return `
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">${problem.type}</span>
+                                    <span class="ml-2 text-sm text-gray-500">Question ${index + 1}</span>
+                                </div>
+                                <h4 class="font-medium text-gray-800 mb-4">${problem.question}</h4>
+                                <div class="space-y-2 mb-4">
+                                    ${problem.options.map((option, i) => `
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="q${problem.id}" value="${i}" class="mr-3">
+                                            <span class="text-sm">${String.fromCharCode(65 + i)}. ${option}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                                <button onclick="showAnswer(${problem.id}, 'mc')" class="text-purple-600 hover:text-purple-800 text-sm font-medium">Show Answer</button>
+                                <div id="answer-${problem.id}" class="hidden mt-3 p-3 bg-green-50 rounded border-l-4 border-green-400">
+                                    <p class="text-sm"><strong>Correct Answer:</strong> ${String.fromCharCode(65 + problem.correct)}. ${problem.options[problem.correct]}</p>
+                                    <p class="text-sm mt-1 text-gray-600">${problem.explanation}</p>
+                                </div>
+                            </div>
+                        `;
+                    case 'Short Answer':
+                        return `
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">${problem.type}</span>
+                                    <span class="ml-2 text-sm text-gray-500">Question ${index + 1}</span>
+                                </div>
+                                <h4 class="font-medium text-gray-800 mb-4">${problem.question}</h4>
+                                <textarea class="w-full p-3 border border-gray-300 rounded-lg resize-none h-20 text-sm" placeholder="Type your answer here..."></textarea>
+                                <button onclick="showAnswer(${problem.id}, 'sa')" class="mt-3 text-purple-600 hover:text-purple-800 text-sm font-medium">Show Sample Answer</button>
+                                <div id="answer-${problem.id}" class="hidden mt-3 p-3 bg-blue-50 rounded border-l-4 border-blue-400">
+                                    <p class="text-sm"><strong>Sample Answer:</strong></p>
+                                    <p class="text-sm mt-1">${problem.sampleAnswer}</p>
+                                </div>
+                            </div>
+                        `;
+                    case 'True/False':
+                        return `
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-1 rounded">${problem.type}</span>
+                                    <span class="ml-2 text-sm text-gray-500">Question ${index + 1}</span>
+                                </div>
+                                <h4 class="font-medium text-gray-800 mb-4">${problem.question}</h4>
+                                <div class="flex gap-4 mb-4">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="q${problem.id}" value="true" class="mr-2">
+                                        <span class="text-sm">True</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="q${problem.id}" value="false" class="mr-2">
+                                        <span class="text-sm">False</span>
+                                    </label>
+                                </div>
+                                <button onclick="showAnswer(${problem.id}, 'tf')" class="text-purple-600 hover:text-purple-800 text-sm font-medium">Show Answer</button>
+                                <div id="answer-${problem.id}" class="hidden mt-3 p-3 bg-green-50 rounded border-l-4 border-green-400">
+                                    <p class="text-sm"><strong>Correct Answer:</strong> ${problem.correct ? 'True' : 'False'}</p>
+                                    <p class="text-sm mt-1 text-gray-600">${problem.explanation}</p>
+                                </div>
+                            </div>
+                        `;
+                    case 'Fill in the Blank':
+                        return `
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2 py-1 rounded">${problem.type}</span>
+                                    <span class="ml-2 text-sm text-gray-500">Question ${index + 1}</span>
+                                </div>
+                                <h4 class="font-medium text-gray-800 mb-4">${problem.question}</h4>
+                                <input type="text" class="w-full p-3 border border-gray-300 rounded-lg text-sm" placeholder="Type your answer here...">
+                                <button onclick="showAnswer(${problem.id}, 'fb')" class="mt-3 text-purple-600 hover:text-purple-800 text-sm font-medium">Show Answer</button>
+                                <div id="answer-${problem.id}" class="hidden mt-3 p-3 bg-green-50 rounded border-l-4 border-green-400">
+                                    <p class="text-sm"><strong>Correct Answer:</strong> ${problem.answer}</p>
+                                    <p class="text-sm mt-1 text-gray-600">${problem.explanation}</p>
+                                </div>
+                            </div>
+                        `;
+                    default:
+                        return '';
+                }
+            }).join('');
+        }
+
+        function showAnswer(problemId, type) {
+            const answerDiv = document.getElementById(`answer-${problemId}`);
+            answerDiv.classList.toggle('hidden');
+        }
+
+        function closePracticeModal() {
+            document.getElementById('practiceModal').classList.add('hidden');
+        }
+
+        function generateMoreProblems() {
+            if (currentContent) {
+                createPracticeProblems(currentContent);
+            } else {
+                alert('Please provide content first to generate more problems.');
+            }
+        }
+
+        function savePracticeProblems() {
+            if (generatedProblems.length > 0) {
+                // Add to assignments section
+                const practiceSet = {
+                    id: Date.now(),
+                    title: `Practice Problems - ${new Date().toLocaleDateString()}`,
+                    description: `AI-generated practice problems (${generatedProblems.length} questions)`,
+                    date: new Date().toLocaleDateString(),
+                    problems: generatedProblems
+                };
+                
+                studyData.assignments.push(practiceSet);
+                updateStats();
+                alert('Practice problems saved to your assignments!');
+                closePracticeModal();
+            }
+        }
+
+        // AI Summary Generator Functions
+        function generateSummary() {
+            const fileInput = document.getElementById('ai-content-input');
+            const manualContent = document.getElementById('manual-content').value.trim();
+            
+            if (fileInput.files.length > 0) {
+                // Handle file upload
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentContent = e.target.result;
+                    createSummary(currentContent);
+                };
+                reader.readAsText(file);
+            } else if (manualContent) {
+                // Handle manual text input
+                currentContent = manualContent;
+                createSummary(currentContent);
+            } else {
+                showNoContentPopup('summary');
+                return;
+            }
+        }
+
+        function createSummary(content) {
+            // Show loading state
+            document.getElementById('summaryModal').classList.remove('hidden');
+            document.getElementById('summaryContent').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p class="text-gray-600">AI is analyzing your content and creating a comprehensive summary...</p>
+                </div>
+            `;
+
+            // Simulate AI processing (in a real app, this would call an AI API)
+            setTimeout(() => {
+                generatedSummary = generateSummaryFromContent(content);
+                displaySummary();
+            }, 2500);
+        }
+
+        function generateSummaryFromContent(content) {
+            // This simulates AI-generated summary based on content analysis
+            // In a real implementation, this would use an AI API like OpenAI GPT
+            
+            const words = content.split(/\s+/);
+            const wordCount = words.length;
+            const topics = extractTopics(content);
+            
+            // Generate key points based on content
+            const keyPoints = topics.map(topic => {
+                return `${topic.charAt(0).toUpperCase() + topic.slice(1)} plays a crucial role in understanding the core concepts presented in this material.`;
+            });
+
+            // Create structured summary
+            const summary = {
+                overview: `This material covers ${topics.length} main topics across ${wordCount} words. The content provides comprehensive insights into key concepts that are essential for understanding the subject matter.`,
+                keyPoints: keyPoints,
+                mainTopics: topics,
+                conclusion: `In summary, this material emphasizes the importance of ${topics.slice(0, 2).join(' and ')} as fundamental concepts. Understanding these elements will provide a solid foundation for further study in this area.`,
+                wordCount: wordCount,
+                readingTime: Math.ceil(wordCount / 200) // Average reading speed
+            };
+
+            return summary;
+        }
+
+        function displaySummary() {
+            const content = document.getElementById('summaryContent');
+            
+            if (!generatedSummary) {
+                content.innerHTML = `
+                    <div class="text-center py-8 text-gray-400">
+                        <p>No summary could be generated from this content. Try providing more detailed material.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Summary Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-blue-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-blue-600">${generatedSummary.wordCount}</div>
+                            <div class="text-sm text-blue-600">Words</div>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-green-600">${generatedSummary.readingTime}</div>
+                            <div class="text-sm text-green-600">Min Read</div>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-purple-600">${generatedSummary.mainTopics.length}</div>
+                            <div class="text-sm text-purple-600">Key Topics</div>
+                        </div>
+                    </div>
+
+                    <!-- Overview -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded mr-3">Overview</span>
+                        </h4>
+                        <p class="text-gray-700 leading-relaxed">${generatedSummary.overview}</p>
+                    </div>
+
+                    <!-- Key Points -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded mr-3">Key Points</span>
+                        </h4>
+                        <ul class="space-y-3">
+                            ${generatedSummary.keyPoints.map((point, index) => `
+                                <li class="flex items-start">
+                                    <span class="bg-green-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">${index + 1}</span>
+                                    <span class="text-gray-700">${point}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <!-- Main Topics -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2 py-1 rounded mr-3">Main Topics</span>
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${generatedSummary.mainTopics.map(topic => `
+                                <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">${topic}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Conclusion -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                            <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-1 rounded mr-3">Conclusion</span>
+                        </h4>
+                        <p class="text-gray-700 leading-relaxed">${generatedSummary.conclusion}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeSummaryModal() {
+            document.getElementById('summaryModal').classList.add('hidden');
+        }
+
+        function generateNewSummary() {
+            if (currentContent) {
+                createSummary(currentContent);
+            } else {
+                alert('Please provide content first to generate a new summary.');
+            }
+        }
+
+        function saveSummary() {
+            if (generatedSummary) {
+                // Add to notes section
+                const summaryNote = {
+                    id: Date.now(),
+                    title: `AI Summary - ${new Date().toLocaleDateString()}`,
+                    description: `AI-generated summary (${generatedSummary.wordCount} words, ${generatedSummary.readingTime} min read)`,
+                    date: new Date().toLocaleDateString(),
+                    summary: generatedSummary
+                };
+                
+                studyData.notes.push(summaryNote);
+                updateStats();
+                alert('Summary saved to your notes!');
+                closeSummaryModal();
+            }
+        }
+
+        // No Content Popup Functions
+        function showNoContentPopup(type) {
+            const modal = document.getElementById('noContentModal');
+            const title = document.getElementById('noContentTitle');
+            const message = document.getElementById('noContentMessage');
+            
+            if (type === 'practice') {
+                title.textContent = 'No Content for Practice Problems';
+                message.textContent = 'Please upload a file or paste your notes/lecture content to generate practice problems.';
+            } else if (type === 'summary') {
+                title.textContent = 'No Content to Summarize';
+                message.textContent = 'Please upload a file or paste your notes/lecture slides to create a summary.';
+            }
+            
+            modal.classList.remove('hidden');
+            // Add animation
+            setTimeout(() => {
+                modal.querySelector('.transform').classList.remove('scale-95');
+                modal.querySelector('.transform').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeNoContentModal() {
+            const modal = document.getElementById('noContentModal');
+            modal.querySelector('.transform').classList.remove('scale-100');
+            modal.querySelector('.transform').classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function focusContentInput() {
+            closeNoContentModal();
+            // Scroll to AI Practice Generator section
+            const aiSection = document.querySelector('.card-hover:has(#ai-content-input)');
+            if (aiSection) {
+                aiSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Focus on textarea after scroll
+                setTimeout(() => {
+                    document.getElementById('manual-content').focus();
+                    // Add a subtle highlight effect
+                    document.getElementById('manual-content').style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.3)';
+                    setTimeout(() => {
+                        document.getElementById('manual-content').style.boxShadow = '';
+                    }, 2000);
+                }, 500);
+            }
+        }
+
+        // Lecture Recording Functions
+        async function startRecording() {
+            console.log('🎙️ Start Recording button clicked');
+            console.log('📱 Device info:', {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+                isSafari: /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
+            });
+            
+            // Show immediate feedback
+            const startBtn = document.getElementById('start-recording');
+            const originalText = startBtn.innerHTML;
+            startBtn.innerHTML = '⏳ Starting...';
+            startBtn.disabled = true;
+            
+            try {
+                console.log('🔍 Checking browser support...');
+                
+                // Check if browser supports required APIs
+                if (!navigator.mediaDevices) {
+                    throw new Error('MediaDevices API not supported. Please use Safari on iPad or update your browser.');
+                }
+                
+                if (!navigator.mediaDevices.getUserMedia) {
+                    throw new Error('Microphone access not supported. Please use Safari on iPad.');
+                }
+                
+                if (!window.MediaRecorder) {
+                    throw new Error('Audio recording not supported. Please use Safari 14.1+ on iPad.');
+                }
+                
+                console.log('✅ Browser APIs supported');
+                
+                // Get selected language
+                currentLanguage = document.getElementById('recording-language').value;
+                console.log('🌐 Selected language:', currentLanguage);
+                
+                // iPad-specific microphone request
+                console.log('🎤 Requesting microphone access for iPad...');
+                
+                const constraints = {
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true,
+                        sampleRate: 44100,
+                        channelCount: 1
+                    }
+                };
+                
+                console.log('📋 Audio constraints:', constraints);
+                
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                
+                console.log('✅ Microphone access granted');
+                console.log('🎵 Audio tracks:', stream.getAudioTracks().length);
+                
+                // iPad-compatible MIME types (Safari priority)
+                let options = {};
+                const mimeTypes = [
+                    'audio/mp4',
+                    'audio/aac',
+                    'audio/webm;codecs=opus',
+                    'audio/webm',
+                    'audio/ogg;codecs=opus',
+                    '' // fallback to default
+                ];
+                
+                console.log('🔧 Testing MIME type support for iPad...');
+                for (const mimeType of mimeTypes) {
+                    if (mimeType === '' || MediaRecorder.isTypeSupported(mimeType)) {
+                        if (mimeType) options.mimeType = mimeType;
+                        console.log('✅ Using MIME type:', mimeType || 'default (Safari will choose)');
+                        break;
+                    }
+                }
+                
+                // Create MediaRecorder with iPad-optimized settings
+                console.log('📹 Creating MediaRecorder for iPad...');
+                try {
+                    mediaRecorder = new MediaRecorder(stream, options);
+                } catch (e) {
+                    console.log('⚠️ Fallback: Creating MediaRecorder without options');
+                    mediaRecorder = new MediaRecorder(stream); // Fallback without options
+                }
+                
+                audioChunks = [];
+                
+                // Set up event handlers
+                mediaRecorder.ondataavailable = (event) => {
+                    console.log('📊 Data chunk received:', event.data.size, 'bytes');
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    console.log('⏹️ Recording stopped');
+                    if (audioChunks.length > 0) {
+                        const mimeType = options.mimeType || 'audio/mp4';
+                        recordedAudioBlob = new Blob(audioChunks, { type: mimeType });
+                        console.log('💾 Audio blob created:', recordedAudioBlob.size, 'bytes, type:', mimeType);
+                    }
+                    
+                    // Stop all tracks
+                    stream.getTracks().forEach(track => {
+                        track.stop();
+                        console.log('🔇 Track stopped:', track.kind);
+                    });
+                };
+                
+                mediaRecorder.onerror = (event) => {
+                    console.error('❌ MediaRecorder error:', event.error);
+                    showRecordingError('Recording error: ' + event.error.message + '\n\nTip: Make sure you\'re using Safari on iPad and have allowed microphone access.');
+                    resetRecordingState();
+                };
+                
+                mediaRecorder.onstart = () => {
+                    console.log('🎬 MediaRecorder started successfully on iPad');
+                    console.log('📊 MediaRecorder state:', mediaRecorder.state);
+                };
+                
+                // Start recording with iPad-optimized interval
+                console.log('🚀 Starting MediaRecorder on iPad...');
+                mediaRecorder.start(2000); // Collect data every 2 seconds for better iPad performance
+                
+                // Wait longer for iPad to ensure recording started
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                if (mediaRecorder.state !== 'recording') {
+                    throw new Error('MediaRecorder failed to start on iPad (state: ' + mediaRecorder.state + '). Try refreshing and allowing microphone access.');
+                }
+                
+                console.log('✅ Recording confirmed active on iPad');
+                
+                // Set recording state
+                isRecording = true;
+                isPaused = false;
+                recordingStartTime = Date.now();
+                pausedTime = 0;
+                transcriptionText = '';
+                
+                // Update UI
+                updateRecordingUI('recording');
+                
+                // Start timer
+                startRecordingTimer();
+                
+                // Initialize speech recognition for iPad (with delay)
+                setTimeout(() => {
+                    initializeSpeechRecognition();
+                }, 1000);
+                
+                console.log('🎉 Recording setup complete on iPad!');
+                
+                // Show iPad-specific success message
+                showRecordingSuccess('🎉 Recording started successfully on iPad! Speak clearly into your device\'s microphone.');
+                
+            } catch (error) {
+                console.error('💥 Recording failed on iPad:', error);
+                
+                // Reset button
+                startBtn.innerHTML = originalText;
+                startBtn.disabled = false;
+                
+                resetRecordingState();
+                
+                let errorMessage = '🚫 Recording failed on iPad: ';
+                
+                if (error.name === 'NotAllowedError') {
+                    errorMessage += 'Microphone access denied. Please:\n\n1. Tap the Safari address bar\n2. Tap the microphone icon\n3. Select "Allow"\n4. Try recording again';
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage += 'No microphone found. Please check that your iPad\'s microphone is working and not blocked by a case.';
+                } else if (error.name === 'NotSupportedError') {
+                    errorMessage += 'Audio recording not supported. Please update to Safari 14.1+ on iPad.';
+                } else if (error.message.includes('MediaDevices')) {
+                    errorMessage += 'Your browser doesn\'t support audio recording. Please use Safari on iPad.';
+                } else {
+                    errorMessage += error.message + '\n\nTip: Make sure you\'re using Safari on iPad with microphone permissions enabled.';
+                }
+                
+                showRecordingError(errorMessage);
+            }
+        }
+        
+        function showRecordingError(message) {
+            // Update recording status to show error
+            const status = document.getElementById('recording-status');
+            const text = document.getElementById('recording-text');
+            
+            status.classList.remove('bg-gray-400', 'bg-red-500', 'bg-yellow-500');
+            status.classList.add('bg-red-500');
+            text.textContent = 'Recording failed';
+            
+            // Show detailed error in console and alert
+            console.error('🔴 Recording Error:', message);
+            alert(message + '\n\nCheck the browser console for more details.');
+        }
+        
+        function showRecordingSuccess(message) {
+            // Show success message for iPad users
+            const status = document.getElementById('recording-status');
+            const text = document.getElementById('recording-text');
+            
+            // Temporarily show success state
+            status.classList.remove('bg-gray-400', 'bg-yellow-500');
+            status.classList.add('bg-green-500');
+            text.textContent = 'Recording active ✓';
+            
+            // Show success alert for iPad
+            setTimeout(() => {
+                alert(message);
+            }, 500);
+            
+            // Reset to recording state after 2 seconds
+            setTimeout(() => {
+                status.classList.remove('bg-green-500');
+                status.classList.add('bg-red-500');
+                text.textContent = `Recording in ${getLanguageName(currentLanguage)}...`;
+            }, 2000);
+        }
+        
+        function resetRecordingState() {
+            isRecording = false;
+            isPaused = false;
+            mediaRecorder = null;
+            audioChunks = [];
+            recordedAudioBlob = null;
+            transcriptionText = '';
+            pausedTime = 0;
+            
+            if (recordingTimer) {
+                clearInterval(recordingTimer);
+            }
+            
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+            }
+            
+            updateRecordingUI('cleared');
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                isPaused = false;
+                
+                // Stop speech recognition
+                if (recognition) {
+                    recognition.stop();
+                }
+                
+                // Update UI
+                updateRecordingUI('stopped');
+                
+                // Stop timer
+                clearInterval(recordingTimer);
+                
+                // Show generate notes button and additional controls
+                document.getElementById('generate-notes').classList.remove('hidden');
+                document.getElementById('clear-recording').classList.remove('hidden');
+            }
+        }
+
+        function pauseRecording() {
+            if (mediaRecorder && isRecording && !isPaused) {
+                mediaRecorder.pause();
+                isPaused = true;
+                pausedTime += Date.now() - recordingStartTime;
+                
+                // Pause speech recognition
+                if (recognition) {
+                    recognition.stop();
+                }
+                
+                // Update UI
+                updateRecordingUI('paused');
+                
+                // Stop timer
+                clearInterval(recordingTimer);
+            }
+        }
+
+        function resumeRecording() {
+            if (mediaRecorder && isRecording && isPaused) {
+                mediaRecorder.resume();
+                isPaused = false;
+                recordingStartTime = Date.now();
+                
+                // Resume speech recognition
+                initializeSpeechRecognition();
+                
+                // Update UI
+                updateRecordingUI('recording');
+                
+                // Resume timer
+                startRecordingTimer();
+            }
+        }
+
+        function clearRecording() {
+            if (confirm('Are you sure you want to clear this recording? This action cannot be undone.')) {
+                // Reset all recording data
+                audioChunks = [];
+                transcriptionText = '';
+                recordedAudioBlob = null;
+                pausedTime = 0;
+                
+                // Reset UI
+                updateRecordingUI('cleared');
+                document.getElementById('recording-timer').textContent = '00:00';
+                document.getElementById('transcription-text').textContent = 'Listening...';
+                document.getElementById('generate-notes').classList.add('hidden');
+                document.getElementById('clear-recording').classList.add('hidden');
+                
+                alert('Recording cleared successfully!');
+            }
+        }
+
+        function updateRecordingUI(state) {
+            const startBtn = document.getElementById('start-recording');
+            const stopBtn = document.getElementById('stop-recording');
+            const pauseBtn = document.getElementById('pause-recording');
+            const resumeBtn = document.getElementById('resume-recording');
+            const clearBtn = document.getElementById('clear-recording');
+            const indicator = document.getElementById('recording-indicator');
+            const status = document.getElementById('recording-status');
+            const text = document.getElementById('recording-text');
+            const transcription = document.getElementById('live-transcription');
+            const languageSelect = document.getElementById('recording-language');
+            
+            // Hide all buttons first
+            startBtn.classList.add('hidden');
+            stopBtn.classList.add('hidden');
+            pauseBtn.classList.add('hidden');
+            resumeBtn.classList.add('hidden');
+            clearBtn.classList.add('hidden');
+            
+            switch(state) {
+                case 'recording':
+                    stopBtn.classList.remove('hidden');
+                    pauseBtn.classList.remove('hidden');
+                    indicator.classList.remove('hidden');
+                    status.classList.remove('bg-gray-400', 'bg-yellow-500');
+                    status.classList.add('bg-red-500');
+                    text.textContent = `Recording in ${getLanguageName(currentLanguage)}...`;
+                    transcription.classList.remove('hidden');
+                    languageSelect.disabled = true;
+                    break;
+                    
+                case 'paused':
+                    stopBtn.classList.remove('hidden');
+                    resumeBtn.classList.remove('hidden');
+                    clearBtn.classList.remove('hidden');
+                    indicator.classList.add('hidden');
+                    status.classList.remove('bg-red-500', 'bg-gray-400');
+                    status.classList.add('bg-yellow-500');
+                    text.textContent = 'Recording paused';
+                    transcription.classList.add('hidden');
+                    break;
+                    
+                case 'stopped':
+                    startBtn.classList.remove('hidden');
+                    clearBtn.classList.remove('hidden');
+                    indicator.classList.add('hidden');
+                    status.classList.remove('bg-red-500', 'bg-yellow-500');
+                    status.classList.add('bg-gray-400');
+                    text.textContent = 'Recording completed';
+                    transcription.classList.add('hidden');
+                    languageSelect.disabled = false;
+                    break;
+                    
+                case 'cleared':
+                    startBtn.classList.remove('hidden');
+                    indicator.classList.add('hidden');
+                    status.classList.remove('bg-red-500', 'bg-yellow-500');
+                    status.classList.add('bg-gray-400');
+                    text.textContent = 'Ready to record';
+                    transcription.classList.add('hidden');
+                    languageSelect.disabled = false;
+                    break;
+            }
+        }
+
+        function getLanguageName(langCode) {
+            const languages = {
+                'en-US': 'English (US)',
+                'en-GB': 'English (UK)',
+                'es-ES': 'Spanish (Spain)',
+                'es-MX': 'Spanish (Mexico)',
+                'fr-FR': 'French',
+                'de-DE': 'German',
+                'it-IT': 'Italian',
+                'pt-BR': 'Portuguese (Brazil)',
+                'pt-PT': 'Portuguese (Portugal)',
+                'ru-RU': 'Russian',
+                'zh-CN': 'Chinese (Simplified)',
+                'zh-TW': 'Chinese (Traditional)',
+                'ja-JP': 'Japanese',
+                'ko-KR': 'Korean',
+                'ar-SA': 'Arabic',
+                'hi-IN': 'Hindi',
+                'nl-NL': 'Dutch',
+                'sv-SE': 'Swedish',
+                'da-DK': 'Danish',
+                'no-NO': 'Norwegian',
+                'fi-FI': 'Finnish',
+                'pl-PL': 'Polish',
+                'tr-TR': 'Turkish',
+                'he-IL': 'Hebrew',
+                'th-TH': 'Thai',
+                'vi-VN': 'Vietnamese'
+            };
+            return languages[langCode] || 'Unknown Language';
+        }
+
+        function startRecordingTimer() {
+            recordingTimer = setInterval(() => {
+                const elapsed = (Date.now() - recordingStartTime) + pausedTime;
+                const minutes = Math.floor(elapsed / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                document.getElementById('recording-timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function initializeSpeechRecognition() {
+            console.log('🎤 Initializing speech recognition for iPad...');
+            
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                try {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    recognition = new SpeechRecognition();
+                    
+                    // iPad-optimized settings
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    recognition.lang = currentLanguage;
+                    recognition.maxAlternatives = 1;
+                    
+                    // iPad-specific settings for better performance
+                    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                        console.log('📱 Applying iPad-specific speech recognition settings');
+                        recognition.continuous = false; // Better for iPad Safari
+                        recognition.interimResults = false; // More stable on iPad
+                    }
+                    
+                    recognition.onstart = () => {
+                        console.log('✅ Speech recognition started for language:', currentLanguage);
+                        const transcriptionElement = document.getElementById('transcription-text');
+                        transcriptionElement.textContent = 'Listening on iPad...';
+                        transcriptionElement.classList.add('italic');
+                    };
+                    
+                    recognition.onresult = (event) => {
+                        console.log('📝 Speech recognition result received');
+                        let finalTranscript = '';
+                        let interimTranscript = '';
+                        
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            const transcript = event.results[i][0].transcript;
+                            if (event.results[i].isFinal) {
+                                finalTranscript += transcript + ' ';
+                            } else {
+                                interimTranscript += transcript;
+                            }
+                        }
+                        
+                        if (finalTranscript) {
+                            transcriptionText += finalTranscript;
+                            console.log('✅ Final transcript added:', finalTranscript);
+                        }
+                        
+                        const displayText = transcriptionText + interimTranscript;
+                        const transcriptionElement = document.getElementById('transcription-text');
+                        
+                        if (displayText.trim()) {
+                            transcriptionElement.textContent = displayText;
+                            transcriptionElement.classList.remove('italic');
+                        } else {
+                            transcriptionElement.textContent = 'Listening on iPad...';
+                            transcriptionElement.classList.add('italic');
+                        }
+                        
+                        // Auto-scroll to bottom of transcription
+                        const transcriptionContainer = transcriptionElement.parentElement;
+                        transcriptionContainer.scrollTop = transcriptionContainer.scrollHeight;
+                    };
+                    
+                    recognition.onerror = (event) => {
+                        console.error('❌ Speech recognition error on iPad:', event.error);
+                        const transcriptionElement = document.getElementById('transcription-text');
+                        
+                        switch(event.error) {
+                            case 'network':
+                                transcriptionElement.textContent = 'Network error - check iPad connection';
+                                break;
+                            case 'not-allowed':
+                                transcriptionElement.textContent = 'Microphone denied - check Safari settings';
+                                break;
+                            case 'no-speech':
+                                // Don't show error for no speech, just continue listening
+                                console.log('⚠️ No speech detected on iPad, continuing...');
+                                transcriptionElement.textContent = 'Speak louder or closer to iPad microphone';
+                                break;
+                            case 'audio-capture':
+                                transcriptionElement.textContent = 'iPad microphone error - check if blocked';
+                                break;
+                            case 'service-not-allowed':
+                                transcriptionElement.textContent = 'Speech service blocked - check iPad settings';
+                                break;
+                            default:
+                                console.log('⚠️ Recognition error on iPad:', event.error);
+                                transcriptionElement.textContent = `Transcription paused on iPad (${event.error})`;
+                        }
+                    };
+                    
+                    recognition.onend = () => {
+                        console.log('🔚 Speech recognition ended on iPad');
+                        // Restart recognition if still recording and not paused (iPad-friendly)
+                        if (isRecording && !isPaused && recognition) {
+                            setTimeout(() => {
+                                try {
+                                    console.log('🔄 Restarting speech recognition on iPad...');
+                                    recognition.start();
+                                } catch (error) {
+                                    console.log('❌ Recognition restart failed on iPad:', error);
+                                    const transcriptionElement = document.getElementById('transcription-text');
+                                    transcriptionElement.textContent = 'Transcription stopped - tap to restart recording';
+                                }
+                            }, 500); // Longer delay for iPad
+                        }
+                    };
+                    
+                    console.log('🚀 Starting speech recognition on iPad...');
+                    recognition.start();
+                    
+                } catch (error) {
+                    console.error('💥 Failed to initialize speech recognition on iPad:', error);
+                    const transcriptionElement = document.getElementById('transcription-text');
+                    transcriptionElement.textContent = `Speech recognition not available on this iPad. Recording will continue without transcription.`;
+                }
+            } else {
+                console.log('❌ Speech recognition not supported on this iPad');
+                const transcriptionElement = document.getElementById('transcription-text');
+                transcriptionElement.textContent = 'Live transcription not supported on this iPad browser. Recording will continue.';
+            }
+        }
+
+        function generateNotesFromRecording() {
+            if (!recordedAudioBlob && !transcriptionText) {
+                alert('No recording found. Please record a lecture first.');
+                return;
+            }
+            
+            // Show loading state
+            document.getElementById('generatedNotesModal').classList.remove('hidden');
+            document.getElementById('generatedNotesContent').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p class="text-gray-600">AI is analyzing your lecture recording and generating comprehensive notes...</p>
+                    <p class="text-sm text-gray-500 mt-2">This may take a few moments</p>
+                </div>
+            `;
+            
+            // Simulate AI processing (in a real app, this would process the audio and transcription)
+            setTimeout(() => {
+                const generatedNotes = generateNotesFromTranscription(transcriptionText);
+                displayGeneratedNotes(generatedNotes);
+            }, 3000);
+        }
+
+        function generateNotesFromTranscription(transcription) {
+            // This simulates AI-generated notes from lecture transcription
+            // In a real implementation, this would use advanced NLP and AI
+            
+            if (!transcription || transcription.trim().length < 50) {
+                // Generate sample notes if transcription is too short
+                return {
+                    title: `Lecture Notes - ${new Date().toLocaleDateString()}`,
+                    duration: document.getElementById('recording-timer').textContent,
+                    summary: "This lecture covered important concepts that are fundamental to understanding the subject matter. The discussion included key principles and practical applications.",
+                    keyPoints: [
+                        "Introduction to core concepts and terminology",
+                        "Detailed explanation of fundamental principles",
+                        "Practical examples and real-world applications",
+                        "Important formulas and methodologies",
+                        "Summary of key takeaways and next steps"
+                    ],
+                    detailedNotes: [
+                        {
+                            section: "Introduction",
+                            content: "The lecture began with an overview of the main topics to be covered. Key terminology was introduced and defined for better understanding."
+                        },
+                        {
+                            section: "Core Concepts",
+                            content: "The fundamental principles were explained in detail, with emphasis on their practical applications and real-world relevance."
+                        },
+                        {
+                            section: "Examples and Applications",
+                            content: "Several examples were provided to illustrate the concepts, showing how they apply in different scenarios and contexts."
+                        },
+                        {
+                            section: "Conclusion",
+                            content: "The lecture concluded with a summary of key points and suggestions for further study and practice."
+                        }
+                    ],
+                    actionItems: [
+                        "Review the key concepts covered in today's lecture",
+                        "Practice applying the principles to sample problems",
+                        "Read the assigned materials for next class",
+                        "Prepare questions for the next session"
+                    ],
+                    transcription: transcription || "Transcription not available"
+                };
+            }
+            
+            // Process actual transcription
+            const words = transcription.split(/\s+/);
+            const sentences = transcription.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            
+            // Extract key topics (simplified)
+            const keyTopics = extractKeyTopicsFromTranscription(transcription);
+            
+            return {
+                title: `Lecture Notes - ${new Date().toLocaleDateString()}`,
+                duration: document.getElementById('recording-timer').textContent,
+                summary: `This ${Math.ceil(words.length / 150)}-minute lecture covered ${keyTopics.length} main topics with ${sentences.length} key points discussed.`,
+                keyPoints: keyTopics.map(topic => `Discussion of ${topic} and its applications`),
+                detailedNotes: generateDetailedSections(sentences, keyTopics),
+                actionItems: [
+                    "Review the main concepts from this lecture",
+                    "Practice the examples discussed",
+                    "Prepare for upcoming assignments",
+                    "Ask questions about unclear topics"
+                ],
+                transcription: transcription
+            };
+        }
+
+        function extractKeyTopicsFromTranscription(text) {
+            // Simple keyword extraction (in real app, would use advanced NLP)
+            const commonWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'can', 'this', 'that', 'these', 'those', 'we', 'you', 'they', 'it', 'he', 'she'];
+            
+            const words = text.toLowerCase().split(/\s+/);
+            const wordFreq = {};
+            
+            words.forEach(word => {
+                word = word.replace(/[^\w]/g, '');
+                if (word.length > 3 && !commonWords.includes(word)) {
+                    wordFreq[word] = (wordFreq[word] || 0) + 1;
+                }
+            });
+            
+            return Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([word]) => word);
+        }
+
+        function generateDetailedSections(sentences, topics) {
+            const sections = [];
+            const sentencesPerSection = Math.ceil(sentences.length / Math.max(topics.length, 3));
+            
+            for (let i = 0; i < topics.length && i < 4; i++) {
+                const sectionSentences = sentences.slice(i * sentencesPerSection, (i + 1) * sentencesPerSection);
+                sections.push({
+                    section: topics[i] ? topics[i].charAt(0).toUpperCase() + topics[i].slice(1) : `Section ${i + 1}`,
+                    content: sectionSentences.join('. ').trim() || "Content from this section of the lecture."
+                });
+            }
+            
+            return sections;
+        }
+
+        function displayGeneratedNotes(notes) {
+            const content = document.getElementById('generatedNotesContent');
+            
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">${notes.title}</h2>
+                        <div class="flex items-center space-x-4 text-sm text-gray-600">
+                            <span>🕒 Duration: ${notes.duration}</span>
+                            <span>📅 ${new Date().toLocaleDateString()}</span>
+                            <span>🤖 AI Generated</span>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-blue-800 mb-3 flex items-center">
+                            <span class="bg-blue-200 text-blue-800 text-xs font-medium px-2 py-1 rounded mr-3">Summary</span>
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed">${notes.summary}</p>
+                    </div>
+
+                    <!-- Key Points -->
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-green-800 mb-4 flex items-center">
+                            <span class="bg-green-200 text-green-800 text-xs font-medium px-2 py-1 rounded mr-3">Key Points</span>
+                        </h3>
+                        <ul class="space-y-2">
+                            ${notes.keyPoints.map((point, index) => `
+                                <li class="flex items-start">
+                                    <span class="bg-green-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">${index + 1}</span>
+                                    <span class="text-gray-700">${point}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <!-- Detailed Notes -->
+                    <div class="bg-purple-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-purple-800 mb-4 flex items-center">
+                            <span class="bg-purple-200 text-purple-800 text-xs font-medium px-2 py-1 rounded mr-3">Detailed Notes</span>
+                        </h3>
+                        <div class="space-y-4">
+                            ${notes.detailedNotes.map(section => `
+                                <div class="border-l-4 border-purple-300 pl-4">
+                                    <h4 class="font-medium text-purple-800 mb-2">${section.section}</h4>
+                                    <p class="text-gray-700 text-sm leading-relaxed">${section.content}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Action Items -->
+                    <div class="bg-orange-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-orange-800 mb-4 flex items-center">
+                            <span class="bg-orange-200 text-orange-800 text-xs font-medium px-2 py-1 rounded mr-3">Action Items</span>
+                        </h3>
+                        <ul class="space-y-2">
+                            ${notes.actionItems.map(item => `
+                                <li class="flex items-start">
+                                    <span class="text-orange-500 mr-3 mt-1">📋</span>
+                                    <span class="text-gray-700">${item}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <!-- Transcription -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <span class="bg-gray-200 text-gray-800 text-xs font-medium px-2 py-1 rounded mr-3">Full Transcription</span>
+                        </h3>
+                        <div class="bg-white rounded border p-4 max-h-40 overflow-y-auto">
+                            <p class="text-sm text-gray-600 leading-relaxed">${notes.transcription}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeGeneratedNotesModal() {
+            document.getElementById('generatedNotesModal').classList.add('hidden');
+        }
+
+        function editGeneratedNotes() {
+            const content = document.getElementById('generatedNotesContent');
+            const currentContent = content.innerHTML;
+            
+            // Make content editable
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-blue-800 mb-3">Edit Your Notes</h3>
+                        <p class="text-sm text-blue-600 mb-4">Click on any section below to edit it directly.</p>
+                    </div>
+                    <textarea class="w-full h-96 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                              placeholder="Edit your notes here...">${content.textContent}</textarea>
+                    <div class="flex gap-3">
+                        <button onclick="saveEditedNotes()" class="btn-animate bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                            💾 Save Changes
+                        </button>
+                        <button onclick="cancelEdit('${currentContent.replace(/'/g, "\\'")})" class="btn-animate bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium">
+                            ❌ Cancel
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveEditedNotes() {
+            const textarea = document.querySelector('#generatedNotesContent textarea');
+            const editedContent = textarea.value;
+            
+            // Create a simple formatted version
+            document.getElementById('generatedNotesContent').innerHTML = `
+                <div class="bg-white rounded-lg p-6 border">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Edited Notes</h3>
+                    <div class="prose max-w-none">
+                        <pre class="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">${editedContent}</pre>
+                    </div>
+                </div>
+            `;
+            
+            alert('Notes updated successfully!');
+        }
+
+        function cancelEdit(originalContent) {
+            document.getElementById('generatedNotesContent').innerHTML = originalContent;
+        }
+
+        function saveGeneratedNotes() {
+            const notesData = {
+                id: Date.now(),
+                title: `Lecture Recording - ${new Date().toLocaleDateString()}`,
+                description: `AI-generated notes from lecture recording (${document.getElementById('recording-timer').textContent})`,
+                date: new Date().toLocaleDateString(),
+                content: document.getElementById('generatedNotesContent').innerHTML,
+                hasAudio: !!recordedAudioBlob
+            };
+            
+            studyData.notes.push(notesData);
+            updateStats();
+            alert('Lecture notes saved successfully!');
+            closeGeneratedNotesModal();
+            
+            // Reset recording state
+            document.getElementById('generate-notes').classList.add('hidden');
+            document.getElementById('recording-timer').textContent = '00:00';
+            document.getElementById('recording-text').textContent = 'Ready to record';
+            transcriptionText = '';
+            recordedAudioBlob = null;
+        }
+
+        function exportNotes() {
+            const content = document.getElementById('generatedNotesContent');
+            const notesText = content.textContent || content.innerText;
+            
+            // Create downloadable text file
+            const blob = new Blob([notesText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lecture-notes-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Notes exported successfully!');
+        }
+
+        // Add smooth scrolling and interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detect mobile device
+            const isMobile = window.innerWidth <= 768;
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const menuBtn = document.getElementById('mobile-menu-btn');
+                
+                if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMobileMenu();
+                    }
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (window.innerWidth > 768 && !mobileMenu.classList.contains('hidden')) {
+                    toggleMobileMenu();
+                }
+            });
+            
+            // Animate cards on scroll
+            const cards = document.querySelectorAll('.card-hover');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+
+            // Add click handlers for buttons
+            const buttons = document.querySelectorAll('.btn-animate');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // File upload handlers
+            const fileInputs = ['lecture-files', 'tutorial-files', 'lab-files', 'assignment-files', 'notes-files'];
+            fileInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('change', function(e) {
+                        const files = e.target.files;
+                        if (files.length > 0) {
+                            const dropZone = this.parentElement;
+                            const fileCount = files.length;
+                            const fileText = fileCount === 1 ? 'file' : 'files';
+                            
+                            // Update drop zone appearance
+                            dropZone.classList.add('bg-green-50', 'border-green-400');
+                            dropZone.innerHTML = `
+                                <div class="text-green-600 mb-2">✅</div>
+                                <p class="text-sm text-green-600 font-medium">${fileCount} ${fileText} selected</p>
+                                <p class="text-xs text-gray-500 mt-1">Click to change files</p>
+                            `;
+                            
+                            // Reset after 3 seconds
+                            setTimeout(() => {
+                                dropZone.classList.remove('bg-green-50', 'border-green-400');
+                                const category = inputId.split('-')[0];
+                                const icons = {
+                                    'lecture': '📁',
+                                    'tutorial': '📁', 
+                                    'lab': '🔬',
+                                    'assignment': '📋',
+                                    'notes': '📝'
+                                };
+                                const messages = {
+                                    'lecture': 'Drop lecture files here or click to browse',
+                                    'tutorial': 'Add tutorial materials',
+                                    'lab': 'Upload lab experiments',
+                                    'assignment': 'Submit assignment files',
+                                    'notes': 'Add study notes'
+                                };
+                                dropZone.innerHTML = `
+                                    <input type="file" id="${inputId}" multiple accept="${input.accept}" class="hidden">
+                                    <div class="text-${category === 'lecture' || category === 'tutorial' ? 'blue' : category === 'lab' ? 'purple' : category === 'assignment' ? 'orange' : 'pink'}-600 mb-2">${icons[category]}</div>
+                                    <p class="text-sm text-${category === 'lecture' || category === 'tutorial' ? 'blue' : category === 'lab' ? 'purple' : category === 'assignment' ? 'orange' : 'pink'}-600 font-medium">${messages[category]}</p>
+                                    <p class="text-xs text-gray-500 mt-1">${input.accept.includes('.py') ? 'Code, reports, and data files' : input.accept.includes('.ppt') ? 'PDF, PPT, DOC, TXT files supported' : 'Documents, code, and project files'}</p>
+                                `;
+                                // Re-attach event listener
+                                const newInput = document.getElementById(inputId);
+                                newInput.addEventListener('change', arguments.callee);
+                            }, 3000);
+                        }
+                    });
+
+                    // Drag and drop functionality
+                    const dropZone = input.parentElement;
+                    dropZone.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        this.classList.add('border-blue-500', 'bg-blue-50');
+                    });
+
+                    dropZone.addEventListener('dragleave', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('border-blue-500', 'bg-blue-50');
+                    });
+
+                    dropZone.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('border-blue-500', 'bg-blue-50');
+                        
+                        const files = e.dataTransfer.files;
+                        if (files.length > 0) {
+                            // Trigger the same logic as file input change
+                            input.files = files;
+                            input.dispatchEvent(new Event('change'));
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980ee3cd558be22d',t:'MTc1ODE3ODAyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+	
